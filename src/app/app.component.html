@@ -1,7 +1,27 @@
-<h1>The Rick and Morty</h1>
+<div class="app">
+  <header class="app__header header container">
+    <h1 class="header__title">The Rick and Morty</h1>
+  </header>
 
-<a routerLink="/characters" [queryParams]="{ fromPage : characterPage, nameSearch : characterNameSearch }" class="nav-link">Characters</a>
+  <nav class="app__navigation navigation container content-width">
+    <!-- Added aria-current -->
+    <a
+      routerLink="/characters"
+      routerLinkActive="is-active"
+      #menuCharacters="routerLinkActive"
+      [attr.aria-current]="menuCharacters.isActive ? 'page' : undefined"
+      [queryParams]="{ fromPage : characterPage, nameSearch : characterNameSearch }"
+      class="navigation__link">Characters</a>
 
-<a routerLink="/episodes" class="nav-link">Episode Guide</a>
+    <a
+      routerLink="/episodes"
+      routerLinkActive="is-active"
+      #menuEpisodes="routerLinkActive"
+      [attr.aria-current]="menuEpisodes.isActive ? 'page' : undefined"
+      class="navigation__link">Episode Guide</a>
+  </nav>
 
-<router-outlet></router-outlet>
+  <main class="app__main main container content-width">
+    <router-outlet></router-outlet>
+  </main>
+</div>
