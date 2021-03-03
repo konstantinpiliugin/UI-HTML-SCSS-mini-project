@@ -1,12 +1,24 @@
-<table>
-    <tbody *ngIf="episodesCall?.results">
-        <tr *ngFor="let e of episodesCall.results">
-            <td>{{e.name}}</td>
-            <td>{{e.episode}}</td>
-        </tr>
+<div class="stack">
+  <!-- For accessibility reasons and semantic value, these should be links; I'd swap them but I am far too early on in my Angular career -->
+  <table class="table table_episodes">
+    <tbody class="table__body" *ngIf="episodesCall?.results">
+      <tr class="table__row" *ngFor="let e of episodesCall.results">
+        <td class="table__item table__item_name">{{e.name}}</td>
+        <td class="table__item table__item_episode">{{e.episode}}</td>
+      </tr>
     </tbody>
-</table>
+  </table>
 
-<ng-container *ngIf="pages">
-    <span *ngFor="let p of pages" [ngClass]="{'active': (p===currentPage)}" (click)="getEpisodes(p)">{{p}}</span>
-</ng-container>
+  <ng-container *ngIf="pages">
+    <ul class="pagination">
+      <li class="pagination__item" *ngFor="let p of pages">
+        <a class="pagination__link link"
+           [ngClass]="{'is-active': (p===currentPage)}"
+           (click)="getEpisodes(p)"
+           > 
+           {{p}}
+        </a>
+      </li>
+    </ul>
+  </ng-container>
+</div>
