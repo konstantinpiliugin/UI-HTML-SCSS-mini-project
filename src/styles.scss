@@ -1,1 +1,477 @@
 /* You can add global styles to this file, and also import other style files */
+
+// =========
+// Variables
+// =========
+
+$colors: (
+  "white": "#fff",
+  "grey": "#7c828d",
+  "light-grey": "#abaeb0",
+  "purple": "#7b68ee",
+  "dark-purple": "#574aa5",
+  "dark-blue": "#2b343b",
+  "darkest-blue": "#292d34",
+  "black": "#1e272e",
+  "shadow": "#384047",
+);
+
+$textSizes: (
+  "sm" : "calc(14 / 16 * 1rem)",
+  "base" : "1rem",
+  "md" : "calc(18 / 16 * 1rem)",
+  "lg" : "2rem", // ~32px
+  "xl" : "4rem", // ~64px
+);
+
+$spacing: (
+  "xs" : "0.5rem",
+  "sm" : "1rem",
+  "md" : "2rem",
+  "lg" : "3rem",
+  "xl" : "4rem",
+);
+
+
+
+// =================
+// Custom Properties
+// =================
+
+:root {
+  /**
+   * There is really no reason to do something like this when I have
+   * created the sass colour variables above, except that custom
+   * properties are accessible via JS and thus in our components and
+   * they follow the cascade, which is helpful for future enhancements
+   * like user defined preference for, say, dark mode or enhanced
+   * contrast
+   */
+  @each $key, $value in $colors {
+    --color-#{$key}: #{$value};
+  }
+
+  @each $key, $value in $textSizes {
+    --text-size-#{$key}: #{$value};
+  }
+
+  @each $key, $value in $spacing {
+    --spacing-#{$key}: #{$value};
+  }
+
+  --transition-short: 0.25s ease;
+}
+
+
+
+// ================
+// Universal & Body
+// ================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  // Modern font stack, shoutout to Github's dev team!
+  font-family: "Gotham Pro", system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+  font-weight: 400;
+  font-size: 100%; // assume base 16px unless user specifies different
+  background-color: var(--color-black, pink); // pink is a fallback to help signal something is wrong
+  color: var(--color-white);
+}
+
+
+
+// ==========
+// Typography
+// ==========
+
+// NOTE: I did not include the `Gotham Pro` font family in the repo
+// because I simply couldn't shake the idea that it was copyrighted
+// material. Better safe than subject to a DMCA take down request,
+// amirite?
+
+.link {
+  color: var(--color-white);
+  transition: var(--transition-short);
+
+  &:hover,
+  &:active {
+    cursor: pointer;
+    color: var(--color-purple);
+  }
+}
+
+// STATE: `.link` is active
+.is-active.link {
+  font-weight: bold;
+}
+
+
+
+// ======
+// Images
+// ======
+// Courtesy of the Internet's own Zach Leat https://www.zachleat.com/web/fluid-images/
+img {
+  max-width: 100%;
+}
+
+img[width] {
+  width: auto; /* Defer to max-width */
+}
+
+img[width][height] {
+  height: auto; /* Preserve aspect ratio */
+}
+
+/* Let SVG scale without boundaries */
+img[src$=".svg"] {
+  width: 100%;
+  height: auto;
+  max-width: none;
+}
+
+
+
+// ==========
+// Components
+// ==========
+
+// Header Block
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 248px;
+  padding-top: 17px;
+  background-color: var(--color-white);
+  background-image: url(assets/hero-image.svg);
+  background-position: center 17px;
+  background-repeat: no-repeat;
+}
+
+.header__title {
+  margin: 0;
+  font-size: var(--text-size-xl);
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  color: var(--color-darkest-blue);
+}
+
+// Navigation Block
+
+.navigation {
+  display: flex;
+  justify-content: center;
+  margin: 56px auto 72px;
+
+  @media screen and (max-width: 500px) {
+    flex-flow: column nowrap;  
+    align-items: center;
+  }
+}
+
+.navigation__link {
+  font-size: var(--text-size-lg);
+  text-decoration: none;
+  line-height: 1;
+  color: var(--color-light-grey);
+  transition: color 0.25s ease;
+
+  & + .navigation__link {
+    // Spacing between menu items
+    margin-left: 45px
+  }
+
+  // STATE: is-active
+  &[aria-current] {
+    font-weight: bold;
+    color: var(--color-white);
+  }
+
+  @media screen and (max-width: 500px) {
+    & + .navigation__link {
+      margin-top: var(--spacing-sm);
+      margin-left: unset;
+    } 
+  }
+}
+
+// Main Block
+
+.main {
+  margin-bottom: var(--spacing-md);
+}
+
+// Table Block
+
+.table {
+  width: 100%;
+}
+
+.table__row {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 10px 16px;
+  background: var(--dark-blue, #2B343B);
+  border: 1px solid var(--color-shadow, #384047);
+  border-radius: 3px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.11);
+
+  & + .table__row {
+    border-top: none;
+  }
+}
+
+.table__item {
+  flex: 0 0 108px;
+  font-size: var(--text-size-xs);
+  text-transform: capitalize;
+
+  @media screen and (max-width: 800px) {
+    flex-basis: unset;
+  }
+
+  @media screen and (max-width: 500px) {
+    &:nth-child(2) {
+      margin-left: unset;
+    }
+  }
+}
+
+.table__item_name,
+.table__item--name {
+  flex: 1;
+
+ @media screen and (max-width: 500px) {
+   flex: 1 0 100%;
+   font-weight: bold;
+   margin-bottom: var(--spacing-xs);
+ }
+}
+
+.table_episodes {
+  .table__item {
+    &:last-child {
+      text-align: right;
+    }
+  }
+}
+
+.table_characters {
+  .table__row {
+    transition: var(--transition-short);
+
+    &:hover,
+    &:active {
+      cursor: pointer;
+      color: var(--color-purple);
+      background-color: var(--color-shadow);
+    }
+  }
+}
+
+// Pagination Block
+
+.pagination {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
+  list-style: none;
+}
+
+.pagination__item {
+  margin-bottom: 0.25rem;
+
+  & + .pagination__item {
+    margin-left: var(--spacing-sm);
+  }
+}
+
+// Search Block
+
+// .search {}
+
+.search__wrapper {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.search__input {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: var(--text-size-base);
+  line-height: calc(18 / 16 * 1rem);
+  color: var(--color-darkest-blue);
+  background-color: var(--color-white);
+  border-radius: 6px;
+  border: none;
+
+  &:placeholder-shown {
+    color: var(--color-grey);
+  }
+
+  @media screen and (max-width: 500px) {
+    flex: 1 0 100%;
+  }
+}
+
+.search__button {
+  appearance: none;
+  padding: 10px 75px;
+  font-size: var(--text-size-md);
+  color: var(--color-white);
+  background-color: var(--color-purple);
+  border-radius: 6px;
+  border: none;
+  transition: var(--transition-short);
+
+  &:hover,
+  &:active,
+  &:focus {
+    cursor: pointer;
+    background-color: var(--color-dark-purple);
+  }
+
+  @media screen and (max-width: 800px) {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  @media screen and (max-width: 500px) {
+    flex: 1;
+    margin-top: var(--spacing-xs);
+  }
+}
+
+// Card Block
+
+.card {
+  max-width: 613px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: var(--spacing-md); 
+  padding-bottom: var(--spacing-xl); 
+  background: var(--color-dark-blue);
+  border: 1px solid var(--color-shadow);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.11);
+  border-radius: 10px; 
+}
+
+.card__image {
+  border-radius: 100px;
+
+  @media screen and (max-width: 500px) {
+    border-radius: 60px;
+  }
+}
+
+.card__title {
+  padding-top: var(--spacing-xs);
+  line-height: 1;
+  font-size: calc(36 / 16 * 1rem);
+}
+
+.card__properties {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--text-size-md);
+  line-height: 1;
+
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+
+    & > li {
+      margin-right: unset;
+      margin-bottom: var(--spacing-xs);
+    }
+  }
+}
+
+
+
+// ================
+// Utitlity Classes
+// ================
+
+.sr-only {
+  // Hide visually but not from assistive tech
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  white-space: nowrap !important;
+}
+
+.container {
+  // Make sure horizontal spacing to viewport edge is consistent
+  padding-right: 2rem;
+  padding-left: 2rem;
+}
+
+.content-width {
+  max-width: calc(1004px + 4rem); // Offset the `.container` margin at full width
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stack {
+  // Fun little utility that spaces every direct child descendant out
+  // vertically, only if it has a sibling that proceeds it.
+  --v-rhythm: var(--spacing-md);
+
+  & > * {
+    // Reset vertical rhythm
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  & > * + * {
+    margin-top: var(--v-rhythm);
+  }
+}
+
+.stack--lg,
+.stack_lg {
+  --v-rhythm: var(--spacing-lg);
+}
+
+.stack-h {
+  // NOTE: Assumes LTR reading direction
+  --h-rhythm: 24px;
+
+  & > * {
+    // Reset horizontal rhythm
+    margin-left: 0;
+    margin-right: var(--h-rhythm);
+  }
+
+  & > *:last-child {
+    margin-right: unset;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.list-reset {
+  list-style: none;
+  padding: unset;
+}
